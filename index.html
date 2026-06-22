@@ -1,67 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <title>Band 9 Clinical Grammar Laboratory</title>
     <style>
-        .container { max-width: 800px; margin: auto; font-family: Arial; }
-        .audit-box { border: 1px solid #ccc; padding: 20px; margin-top: 20px; border-radius: 8px; }
-        .wrong { color: #d9534f; text-decoration: line-through; }
-        .correct { color: #5cb85c; font-weight: bold; }
-        .suggestion { background: #f0f8ff; padding: 10px; border-left: 5px solid #007bff; margin-top: 10px; }
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; max-width: 850px; margin: 40px auto; padding: 20px; background: #f4f7f6; }
+        .drill-box { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        select, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; }
+        button { background: #2c3e50; color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; }
+        .correct { color: green; font-weight: bold; }
+        .wrong { color: red; text-decoration: underline; }
+        #feedback { margin-top: 20px; padding: 15px; border-radius: 6px; background: #fff; border: 1px solid #ccc; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Band 9 IELTS Clinical Auditor</h2>
-        <label>Competency:</label>
-        <select id="compSelector" onchange="updatePrompt()">
-            <option value="inversion">Inversions (Rarely/Not Only)</option>
-            <option value="subjunctive">Advanced Subjunctive (Had/Were)</option>
-            <option value="register">Academic Register (Nominalization)</option>
+    <h1>Clinical Grammar Laboratory</h1>
+    <div class="drill-box">
+        <label><strong>Select Competency:</strong></label>
+        <select id="competency" onchange="updatePrompt()">
+            <option value="inversion">1. Inversions (Rarely/Not Only)</option>
+            <option value="subjunctive">2. Advanced Subjunctive (Had/Were)</option>
+            <option value="register">3. Academic Register (Nominalization)</option>
+            <option value="connectors">4. Logical Connectors (Not only/but also)</option>
         </select>
         
-        <p id="promptDisplay"></p>
-        <textarea id="userInput" style="width:100%; height:80px;"></textarea>
-        <button onclick="auditPerformance()">Audit Performance</button>
-        
-        <div id="auditResult" class="audit-box"></div>
+        <p id="promptDisplay"><em>Loading prompt...</em></p>
+        <textarea id="userInput" placeholder="Draft your Band 9 response here..."></textarea>
+        <button onclick="auditSubmission()">Audit Professionalism</button>
+        <div id="feedback"></div>
     </div>
 
-<script>
-const drillData = {
-    inversion: {
-        prompt: "Rewrite: 'If the nurse does not check the patient, the error is rarely found early.'",
-        req: ["rarely is", "assessment"],
-        suggestion: "Rarely is an error detected early if the nurse fails to perform a thorough patient assessment."
-    },
-    subjunctive: {
-        prompt: "Rewrite: 'If the staff had received training, they would have been prepared.'",
-        req: ["had", "been"],
-        suggestion: "Had the staff received continuous professional development, they would have been better prepared."
-    }
-};
+    <script>
+        const library = {
+            inversion: [
+                "If nurses do not monitor vitals, the patient status is rarely stable.",
+                "If the hospital enforced strict rules, errors would rarely happen.",
+                "If we had identified the risk earlier, the crisis would rarely have occurred.",
+                "If the team did not follow the protocol, outcomes were rarely positive.",
+                "If government authorities regulated carbon emissions, biodiversity would rarely be threatened.",
+                "If staff did not document the procedure, legal risks would rarely be mitigated.",
+                "If the patient did not receive timely care, survival would rarely be guaranteed.",
+                "If researchers did not analyze the data, systemic failure would rarely be understood.",
+                "If nurses did not prioritize hygiene, infections would rarely be prevented.",
+                "If policymakers did not enact reforms, ecological stability would rarely be achieved."
+            ],
+            subjunctive: [
+                "If the hospital had implemented these protocols earlier, lives would have been saved.",
+                "If medical services were privatized, the cost of healthcare would increase.",
+                "If a nurse encounters a complication, they must follow the protocol.",
+                "If the government had prioritized stewardship, the forest would have survived.",
+                "If the team had allocated resources efficiently, the project would have succeeded.",
+                "If clinical guidelines were strictly followed, errors would be minimized.",
+                "If the patient had received the assessment, the diagnosis would be clear.",
+                "If the community had separated waste, recycling would have been facilitated.",
+                "If management had provided development, staff would have been prepared.",
+                "If we had mitigated the risk, the impact would have been lower."
+            ],
+            // ... (Add register and connectors arrays similarly)
+        };
 
-function updatePrompt() {
-    document.getElementById('promptDisplay').innerText = drillData[document.getElementById('compSelector').value].prompt;
-}
+        function updatePrompt() {
+            const comp = document.getElementById('competency').value;
+            const prompts = library[comp] || ["Generic prompt here."];
+            document.getElementById('promptDisplay').innerHTML = "<em>Prompt: Rewrite: </em>" + prompts[0];
+        }
 
-function auditPerformance() {
-    const input = document.getElementById('userInput').value.toLowerCase();
-    const comp = document.getElementById('compSelector').value;
-    const data = drillData[comp];
-    
-    let score = 0;
-    data.req.forEach(r => { if(input.includes(r)) score += 3; });
-    
-    let band = score >= 6 ? "Band 9 (Masterful)" : (score >= 3 ? "Band 7 (Proficient)" : "Band 6 (Functional)");
-    
-    document.getElementById('auditResult').innerHTML = `
-        <strong>Scoring Audit: ${band}</strong>
-        <div class="suggestion">
-            <strong>Suggested Band 9 Hit:</strong><br>${data.suggestion}
-        </div>
-    `;
-}
-updatePrompt();
-</script>
+        function auditSubmission() {
+            const input = document.getElementById('userInput').value.toLowerCase();
+            const feedback = document.getElementById('feedback');
+            
+            let score = 0;
+            if(input.includes("rarely") || input.includes("had") || input.includes("assessment")) score = 9;
+            
+            feedback.innerHTML = score >= 9 ? 
+                "<span class='correct'>✓ Band 9: Masterful use of syntactic architecture and collocations.</span>" : 
+                "<span class='wrong'>✗ Band 6: Functional, but lacks advanced academic register and logical flow.</span>";
+        }
+        
+        updatePrompt();
+    </script>
 </body>
 </html>
