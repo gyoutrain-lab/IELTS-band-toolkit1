@@ -1,52 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Band 9 Clinical Grammar Laboratory</title>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; max-width: 850px; margin: 40px auto; padding: 20px; background: #f4f7f6; }
-        .drill-box { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        select, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; }
-        button { background: #2c3e50; color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; }
-        .correct { color: green; font-weight: bold; }
-        .wrong { color: red; text-decoration: underline; }
-        #feedback { margin-top: 20px; padding: 15px; border-radius: 6px; background: #fff; border: 1px solid #ccc; }
-    </style>
-</head>
+<html>
 <body>
-    <h1>Clinical Grammar Laboratory</h1>
-    <div class="drill-box">
-        <label><strong>Select Competency:</strong></label>
-        <select id="competency">
-            <option value="inversion">1. Inversions (Rarely do/is...)</option>
-            <option value="subjunctive">2. Advanced Subjunctive (Had...)</option>
-            <option value="register">3. Academic Register (Precision)</option>
-            <option value="connectors">4. Logical Connectors (Not only... but also...)</option>
-        </select>
-        
-        <p id="prompt"><em>Prompt: Rewrite: "If the nurse does not check the patient, the error is rarely found early."</em></p>
-        <textarea id="userInput" placeholder="Draft your Band 9 response here..."></textarea>
-        <button onclick="auditSubmission()">Audit Professionalism</button>
-        <div id="feedback"></div>
-    </div>
+    <select id="compSelector" onchange="updatePrompt()">
+        <option value="inversion">Inversions (Negative Fronting)</option>
+        <option value="subjunctive">Advanced Subjunctive (Had...)</option>
+        <option value="discourse">Logical Connectors & Discourse Joints</option>
+    </select>
 
-    <script>
-        function auditSubmission() {
-            const input = document.getElementById('userInput').value;
-            const feedback = document.getElementById('feedback');
-            const comp = document.getElementById('competency').value;
-            
-            // Simulation of Audit Logic based on source
-            let output = "<strong>Audit Results:</strong><br>";
-            if (comp === "inversion" && input.toLowerCase().includes("rarely is")) {
-                output += "<span class='correct'>✓ Competency Hit: Inversion correctly applied.</span>";
-            } else {
-                output += "<span class='wrong'>✗ Audit: Inversion structure missing. Hint: 'Rarely is...'</span>";
-            }
-            
-            output += "<br><br><strong>Best Hit Suggestion:</strong><br><em>'Rarely is an error detected early if the nurse fails to perform a thorough patient assessment.'</em>";
-            feedback.innerHTML = output;
-        }
-    </script>
+    <p id="promptDisplay">Loading...</p>
+    <textarea id="userInput"></textarea>
+    <button onclick="auditAll()">Audit Performance</button>
+    <div id="feedback"></div>
+
+<script>
+const data = {
+    inversion: {
+        prompt: "Rewrite: 'If the nurse does not check the patient, the error is rarely found early.'",
+        targets: ["rarely is", "assessment"],
+        collocations: ["thorough patient assessment", "clinical protocol"]
+    },
+    discourse: {
+        prompt: "Link these: 'Renewable energy reduces carbon emissions' and 'It creates new jobs.'",
+        targets: ["not only", "but also", "thereby"],
+        collocations: ["carbon footprint", "economic viability"]
+    }
+};
+
+function updatePrompt() {
+    const comp = document.getElementById('compSelector').value;
+    document.getElementById('promptDisplay').innerText = data[comp].prompt;
+}
+
+function auditAll() {
+    const input = document.getElementById('userInput').value.toLowerCase();
+    const comp = document.getElementById('compSelector').value;
+    let score = 0;
+    
+    // Multi-dimensional Scoring Logic
+    data[comp].targets.forEach(t => { if(input.includes(t)) score += 2; });
+    data[comp].collocations.forEach(c => { if(input.includes(c)) score += 1; });
+
+    // Band Level Mapping
+    let band = score >= 5 ? "Band 9" : (score >= 3 ? "Band 7" : "Band 6");
+    
+    document.getElementById('feedback').innerHTML = `
+        <strong>Result: ${band}</strong><br>
+        <em>Critique:</em> ${score >= 5 ? "Masterful use of syntactic architecture." : "Consider integrating more domain-specific collocations."}
+    `;
+}
+updatePrompt();
+</script>
 </body>
 </html>
