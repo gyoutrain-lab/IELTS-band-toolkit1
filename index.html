@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Band 9 Grammar Clinical Drill</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 20px; }
+        .drill-box { border: 2px solid #333; padding: 20px; border-radius: 8px; background: #f9f9f9; }
+        textarea { width: 100%; height: 100px; margin: 10px 0; }
+        button { background: #0056b3; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+        #feedback { margin-top: 20px; padding: 15px; border-left: 5px solid #0056b3; display: none; }
+    </style>
+</head>
+<body>
+    <h1>Clinical Grammar Drill: Band 9</h1>
+    <div class="drill-box">
+        <p><strong>Prompt:</strong> Rewrite this clinical observation using <em>Inversion</em> and <em>Academic Register</em>.</p>
+        <p><em>"If the nurse does not check the patient, the error is rarely found early."</em></p>
+        <textarea id="userInput" placeholder="Type your Band 9 transformation here..."></textarea>
+        <button onclick="checkAnswer()">Submit for Audit</button>
+    </div>
+    <div id="feedback"></div>
+
+    <script>
+        function checkAnswer() {
+            const input = document.getElementById('userInput').value.toLowerCase();
+            const feedback = document.getElementById('feedback');
+            feedback.style.display = 'block';
+            
+            // Logic for Audit based on source
+            if (input.includes("rarely is") && input.includes("assessment")) {
+                feedback.innerHTML = "<strong>Band 9 Score: Exemplary.</strong> You successfully utilized the 'Rarely is' inversion and academic terminology.";
+            } else if (input.includes("rarely")) {
+                feedback.innerHTML = "<strong>Band 7 Score: Good.</strong> You used the inversion, but consider using more precise medical collocations like 'thorough patient assessment'.";
+            } else {
+                feedback.innerHTML = "<strong>Band 6 Score: Functional.</strong> Remember: Use the structure 'Rarely is + [subject] + [past participle]' to hit Band 9.";
+            }
+        }
+    </script>
+</body>
+</html>
