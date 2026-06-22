@@ -1,51 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <style>
+        .container { max-width: 800px; margin: auto; font-family: Arial; }
+        .audit-box { border: 1px solid #ccc; padding: 20px; margin-top: 20px; border-radius: 8px; }
+        .wrong { color: #d9534f; text-decoration: line-through; }
+        .correct { color: #5cb85c; font-weight: bold; }
+        .suggestion { background: #f0f8ff; padding: 10px; border-left: 5px solid #007bff; margin-top: 10px; }
+    </style>
+</head>
 <body>
-    <select id="compSelector" onchange="updatePrompt()">
-        <option value="inversion">Inversions (Negative Fronting)</option>
-        <option value="subjunctive">Advanced Subjunctive (Had...)</option>
-        <option value="discourse">Logical Connectors & Discourse Joints</option>
-    </select>
-
-    <p id="promptDisplay">Loading...</p>
-    <textarea id="userInput"></textarea>
-    <button onclick="auditAll()">Audit Performance</button>
-    <div id="feedback"></div>
+    <div class="container">
+        <h2>Band 9 IELTS Clinical Auditor</h2>
+        <label>Competency:</label>
+        <select id="compSelector" onchange="updatePrompt()">
+            <option value="inversion">Inversions (Rarely/Not Only)</option>
+            <option value="subjunctive">Advanced Subjunctive (Had/Were)</option>
+            <option value="register">Academic Register (Nominalization)</option>
+        </select>
+        
+        <p id="promptDisplay"></p>
+        <textarea id="userInput" style="width:100%; height:80px;"></textarea>
+        <button onclick="auditPerformance()">Audit Performance</button>
+        
+        <div id="auditResult" class="audit-box"></div>
+    </div>
 
 <script>
-const data = {
+const drillData = {
     inversion: {
         prompt: "Rewrite: 'If the nurse does not check the patient, the error is rarely found early.'",
-        targets: ["rarely is", "assessment"],
-        collocations: ["thorough patient assessment", "clinical protocol"]
+        req: ["rarely is", "assessment"],
+        suggestion: "Rarely is an error detected early if the nurse fails to perform a thorough patient assessment."
     },
-    discourse: {
-        prompt: "Link these: 'Renewable energy reduces carbon emissions' and 'It creates new jobs.'",
-        targets: ["not only", "but also", "thereby"],
-        collocations: ["carbon footprint", "economic viability"]
+    subjunctive: {
+        prompt: "Rewrite: 'If the staff had received training, they would have been prepared.'",
+        req: ["had", "been"],
+        suggestion: "Had the staff received continuous professional development, they would have been better prepared."
     }
 };
 
 function updatePrompt() {
-    const comp = document.getElementById('compSelector').value;
-    document.getElementById('promptDisplay').innerText = data[comp].prompt;
+    document.getElementById('promptDisplay').innerText = drillData[document.getElementById('compSelector').value].prompt;
 }
 
-function auditAll() {
+function auditPerformance() {
     const input = document.getElementById('userInput').value.toLowerCase();
     const comp = document.getElementById('compSelector').value;
+    const data = drillData[comp];
+    
     let score = 0;
+    data.req.forEach(r => { if(input.includes(r)) score += 3; });
     
-    // Multi-dimensional Scoring Logic
-    data[comp].targets.forEach(t => { if(input.includes(t)) score += 2; });
-    data[comp].collocations.forEach(c => { if(input.includes(c)) score += 1; });
-
-    // Band Level Mapping
-    let band = score >= 5 ? "Band 9" : (score >= 3 ? "Band 7" : "Band 6");
+    let band = score >= 6 ? "Band 9 (Masterful)" : (score >= 3 ? "Band 7 (Proficient)" : "Band 6 (Functional)");
     
-    document.getElementById('feedback').innerHTML = `
-        <strong>Result: ${band}</strong><br>
-        <em>Critique:</em> ${score >= 5 ? "Masterful use of syntactic architecture." : "Consider integrating more domain-specific collocations."}
+    document.getElementById('auditResult').innerHTML = `
+        <strong>Scoring Audit: ${band}</strong>
+        <div class="suggestion">
+            <strong>Suggested Band 9 Hit:</strong><br>${data.suggestion}
+        </div>
     `;
 }
 updatePrompt();
