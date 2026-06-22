@@ -2,39 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Band 9 Grammar Clinical Drill</title>
+    <title>Band 9 Clinical Grammar Laboratory</title>
     <style>
-        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 40px auto; padding: 20px; }
-        .drill-box { border: 2px solid #333; padding: 20px; border-radius: 8px; background: #f9f9f9; }
-        textarea { width: 100%; height: 100px; margin: 10px 0; }
-        button { background: #0056b3; color: white; padding: 10px 20px; border: none; cursor: pointer; }
-        #feedback { margin-top: 20px; padding: 15px; border-left: 5px solid #0056b3; display: none; }
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; max-width: 850px; margin: 40px auto; padding: 20px; background: #f4f7f6; }
+        .drill-box { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        select, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; }
+        button { background: #2c3e50; color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; }
+        .correct { color: green; font-weight: bold; }
+        .wrong { color: red; text-decoration: underline; }
+        #feedback { margin-top: 20px; padding: 15px; border-radius: 6px; background: #fff; border: 1px solid #ccc; }
     </style>
 </head>
 <body>
-    <h1>Clinical Grammar Drill: Band 9</h1>
+    <h1>Clinical Grammar Laboratory</h1>
     <div class="drill-box">
-        <p><strong>Prompt:</strong> Rewrite this clinical observation using <em>Inversion</em> and <em>Academic Register</em>.</p>
-        <p><em>"If the nurse does not check the patient, the error is rarely found early."</em></p>
-        <textarea id="userInput" placeholder="Type your Band 9 transformation here..."></textarea>
-        <button onclick="checkAnswer()">Submit for Audit</button>
+        <label><strong>Select Competency:</strong></label>
+        <select id="competency">
+            <option value="inversion">1. Inversions (Rarely do/is...)</option>
+            <option value="subjunctive">2. Advanced Subjunctive (Had...)</option>
+            <option value="register">3. Academic Register (Precision)</option>
+            <option value="connectors">4. Logical Connectors (Not only... but also...)</option>
+        </select>
+        
+        <p id="prompt"><em>Prompt: Rewrite: "If the nurse does not check the patient, the error is rarely found early."</em></p>
+        <textarea id="userInput" placeholder="Draft your Band 9 response here..."></textarea>
+        <button onclick="auditSubmission()">Audit Professionalism</button>
+        <div id="feedback"></div>
     </div>
-    <div id="feedback"></div>
 
     <script>
-        function checkAnswer() {
-            const input = document.getElementById('userInput').value.toLowerCase();
+        function auditSubmission() {
+            const input = document.getElementById('userInput').value;
             const feedback = document.getElementById('feedback');
-            feedback.style.display = 'block';
+            const comp = document.getElementById('competency').value;
             
-            // Logic for Audit based on source
-            if (input.includes("rarely is") && input.includes("assessment")) {
-                feedback.innerHTML = "<strong>Band 9 Score: Exemplary.</strong> You successfully utilized the 'Rarely is' inversion and academic terminology.";
-            } else if (input.includes("rarely")) {
-                feedback.innerHTML = "<strong>Band 7 Score: Good.</strong> You used the inversion, but consider using more precise medical collocations like 'thorough patient assessment'.";
+            // Simulation of Audit Logic based on source
+            let output = "<strong>Audit Results:</strong><br>";
+            if (comp === "inversion" && input.toLowerCase().includes("rarely is")) {
+                output += "<span class='correct'>✓ Competency Hit: Inversion correctly applied.</span>";
             } else {
-                feedback.innerHTML = "<strong>Band 6 Score: Functional.</strong> Remember: Use the structure 'Rarely is + [subject] + [past participle]' to hit Band 9.";
+                output += "<span class='wrong'>✗ Audit: Inversion structure missing. Hint: 'Rarely is...'</span>";
             }
+            
+            output += "<br><br><strong>Best Hit Suggestion:</strong><br><em>'Rarely is an error detected early if the nurse fails to perform a thorough patient assessment.'</em>";
+            feedback.innerHTML = output;
         }
     </script>
 </body>
